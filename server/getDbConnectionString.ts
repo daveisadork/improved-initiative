@@ -6,7 +6,8 @@ export async function getDbConnectionString() {
   }
 
   console.log("No connection string found, initializing in-memory DB");
-  const MongodbMemoryServer = require("mongodb-memory-server");
+  const MongodbMemoryServer = require("mongodb-memory-server").default;
+  console.log(MongodbMemoryServer);
   mongod = new MongodbMemoryServer();
   return await mongod.getUri();
 }
