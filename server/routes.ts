@@ -19,7 +19,7 @@ import configureStorageRoutes from "./storageroutes";
 
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
-const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
+const defaultAccountLevel = "epicinitiative";
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
@@ -83,12 +83,8 @@ export default function(
 
     session.encounterId = playerViews.InitializeNew();
 
-    if (defaultAccountLevel !== "free") {
-      return await setupLocalDefaultUser(session, res);
-    } else {
-      const renderOptions = pageRenderOptions(session);
-      return res.render("landing", renderOptions);
-    }
+    const renderOptions = pageRenderOptions(session);
+    return res.render("landing", renderOptions);
   });
 
   app.get("/e/:id", (req: Req, res: Res) => {
@@ -181,14 +177,8 @@ export default function(
 }
 
 async function setupLocalDefaultUser(session: Express.Session, res: Res) {
-  if (defaultAccountLevel === "accountsync") {
-    session.hasStorage = true;
-  }
-
-  if (defaultAccountLevel === "epicinitiative") {
-    session.hasStorage = true;
-    session.hasEpicInitiative = true;
-  }
+  session.hasStorage = true;
+  session.hasEpicInitiative = true;
 
   session.isLoggedIn = true;
 
